@@ -24,10 +24,20 @@ con.connect((err) => {
 app.use(bp.json());
 app.use(cors());
 
-const cities = ["vilnius", "kaunas", "klaipeda"];
+const cities = [
+  { name: "Vilnius", value: "vilnius" },
+  { name: "Kaunas", value: "kaunas" },
+  { name: "Klaipeda", value: "klaipeda" },
+];
+
+app.get("/cities", (req, res) => {
+  res.json(cities);
+});
 
 app.get("/:city", (req, res) => {
-  if (cities.includes(req.params.city.toLowerCase().trim())) {
+  if (
+    cities.some((item) => item.value === req.params.city.toLowerCase().trim())
+  ) {
     con.query(
       `SELECT * FROM products WHERE city = '${req.params.city
         .toLowerCase()
